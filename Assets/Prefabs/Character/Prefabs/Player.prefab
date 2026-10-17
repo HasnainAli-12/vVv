@@ -12,6 +12,12 @@ GameObject:
   - component: {fileID: 1777465580157165815}
   - component: {fileID: 9102617844091813512}
   - component: {fileID: 4421057625005009578}
+  - component: {fileID: 7610438938353423998}
+  - component: {fileID: 6127764432723289700}
+  - component: {fileID: 7841422618456511753}
+  - component: {fileID: 6327981416297198692}
+  - component: {fileID: 5435440947052466661}
+  - component: {fileID: 3633621262388040730}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -146,6 +152,206 @@ MonoBehaviour:
   walkStride: 2.3
   sprintStride: 1.7
   landVelocityThreshold: 4.5
+--- !u!114 &7610438938353423998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668956146100743102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e1a649d7f6b07a408d9bf2223e246a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NasCon.Game.Health
+  maxHealth: 100
+  invulnerabilityTime: 0.15
+  disableDelayOnDeath: 0
+  destroyDelayOnDeath: 0
+  logDamage: 0
+  team: 0
+--- !u!114 &6127764432723289700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668956146100743102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd2b573bbc4f86e44be0a3d292ba575b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NasCon.Game.PlayerAbilities
+  rewindCharges: 3
+  rewindChargesMax: 5
+--- !u!114 &7841422618456511753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668956146100743102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baa0f1534c4fefb48976d5f46fb99cc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NasCon.Game.IntroSequence
+  trigger: Intro
+  holdDuration: 0
+  settleAfter: 0.25
+  blockInput: 1
+  allowSkip: 1
+  skipAfter: 0.3
+  animator: {fileID: 0}
+  brain: {fileID: 0}
+--- !u!114 &6327981416297198692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668956146100743102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 119aed51e177398438c3ec177a2fe416, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NasCon.Game.HitFeedback
+  hitStopChance: 0.3
+  sparkChance: 0.3
+  flashChance: 0.35
+  playerShakeScale: 0.5
+  hitStopLight: 0.025
+  hitStopHeavy: 0.045
+  heavyDamage: 16
+  hitStopScale: 0.55
+  shakeAmount: 0.35
+  flashColor: {r: 2.5, g: 2.5, b: 2.5, a: 1}
+  flashTime: 0.12
+  sparkMaterial: {fileID: 2100000, guid: 819515b0e0fc8c34589dc5b2f7d417a2, type: 2}
+  sparkSize: 0.35
+  sparkLife: 0.18
+  sparkTint: {r: 4, g: 1.6, b: 0.4, a: 1}
+  hitClip: {fileID: 8300000, guid: 2c042549916c9a84699cd296016b4e32, type: 3}
+  volume: 0.7
+--- !u!114 &5435440947052466661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668956146100743102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5ab823839d717948b06cf2f15d86cd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NasCon.Game.TimeRewindAbility
+  recordSeconds: 5
+  sampleRate: 30
+  recordAnimator: 1
+  rewindSpeed: 1.25
+  slowMotionScale: 0.85
+  cooldown: 2
+  health: {fileID: 0}
+  rewindKey: 32
+  rewindSource: {fileID: 3633621262388040730}
+  rewindLoop: {fileID: 8300000, guid: 7edd3af37f1b05d43a7e96a2220d46c1, type: 3}
+--- !u!82 &3633621262388040730
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668956146100743102}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.6
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5081503684218152681
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,28 +772,60 @@ MonoBehaviour:
     trigger: Punch1
     cancelFraction: 0.42
     playbackSpeed: 1
+    hitFraction: 0.4
+    damage: 10
+    hitRadius: 1.1
+    hitReach: 1.3
+    hitHeight: 1.1
   - clip: {fileID: 7400000, guid: c62dd38c11e60514cbfbd75556f131da, type: 3}
     trigger: Punch2
     cancelFraction: 0.42
     playbackSpeed: 1.1
+    hitFraction: 0.4
+    damage: 10
+    hitRadius: 1.1
+    hitReach: 1.3
+    hitHeight: 1.1
   - clip: {fileID: 7400000, guid: 6009fc35f863bd14ba3908a22fd51715, type: 3}
     trigger: Punch3
     cancelFraction: 0.6
     playbackSpeed: 1.1
+    hitFraction: 0.5
+    damage: 22
+    hitRadius: 1.1
+    hitReach: 1.3
+    hitHeight: 1.1
   kickCombo:
   - clip: {fileID: 7400000, guid: 38587c17cd6cfdd4b8e25d3326747748, type: 3}
     trigger: Kick1
     cancelFraction: 0.58
     playbackSpeed: 1.4
+    hitFraction: 0.45
+    damage: 14
+    hitRadius: 1.1
+    hitReach: 1.3
+    hitHeight: 1.1
   - clip: {fileID: 7400000, guid: f410764517d98c547a4ed42923ac30f3, type: 3}
     trigger: Kick2
     cancelFraction: 0.88
     playbackSpeed: 1.4
+    hitFraction: 0.45
+    damage: 14
+    hitRadius: 1.1
+    hitReach: 1.3
+    hitHeight: 1.1
   - clip: {fileID: 7400000, guid: f91caa5c21f5a6e46831a3a0e68b30dc, type: 3}
     trigger: Kick3
     cancelFraction: 1.01
     playbackSpeed: 1.4
+    hitFraction: 0.55
+    damage: 24
+    hitRadius: 1.1
+    hitReach: 1.3
+    hitHeight: 1.1
   comboResetTime: 0.02
+  softAimRange: 3.5
+  softAimAngle: 60
   speedRetention: 0.2
   lungeSpeed: 0.6
 --- !u!114 &7741628792557068963
@@ -653,7 +891,7 @@ MonoBehaviour:
   ledgeMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  climbTime: 1.25
+  climbTime: 0.7111111
   landingInset: 0.4
   cooldown: 0.6
   climbParameter: Climb
@@ -816,6 +1054,10 @@ PrefabInstance:
     - target: {fileID: 5866666021909216657, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
       propertyPath: m_CullingMode
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+      propertyPath: m_WarningMessage
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
       propertyPath: m_ApplyRootMotion

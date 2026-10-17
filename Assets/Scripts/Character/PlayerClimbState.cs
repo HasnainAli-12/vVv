@@ -70,6 +70,10 @@ namespace NasCon.Game
 
             if (Mathf.Abs(Vector3.Dot(face.normal, Vector3.up)) > 0.35f) return false;   // not a vertical face
 
+            // Never climb a character. An enemy's capsule is ~2 m tall with a flat top, so it passes
+            // every geometric test below and the player would mantle straight up the enemy's body.
+            if (face.collider.GetComponentInParent<Health>() != null) return false;
+
             // Cast down from a point INSIDE the ledge to find its top face. This was subtracting
             // forward, which put the probe back on the player's side of the wall - so it hit the floor
             // the player was already standing on instead of the ledge.

@@ -151,7 +151,9 @@ namespace NasCon.Game
             if (target == null)
                 return;
 
-            if (lookAction != null)
+            // Time.timeScale is zero while the pause menu is up. Update and LateUpdate still run at
+            // zero timescale, so without this the mouse keeps swinging the camera behind the menu.
+            if (lookAction != null && Time.timeScale > 0f)
             {
                 Vector2 look = lookAction.ReadValue<Vector2>();
                 yaw += look.x * sensitivity;
@@ -164,7 +166,16 @@ namespace NasCon.Game
             float rollT = rollRate > 0f ? 1f - Mathf.Exp(-rollRate * Time.deltaTime) : 1f;
             currentRoll = Mathf.Lerp(currentRoll, targetRoll, rollT);
 
-            Quaternion rotation = Quaternion.Euler(pitch, yaw, currentRoll);
+            // Hit shake. Additive and decaying, ticked on unscaled time so it keeps settling while
+            // hit-stop has time nearly frozen. Purely a camera offset - nothing gameplay-facing moves.
+            CameraShake.Tick(Time.unscaledDeltaTime);
+            float shake = CameraShake.Magnitude;
+            const float shakeAngle = 2.5f;                 // degrees at full strength
+            float shakePitch = shake * shakeAngle * Mathf.Sin(Time.unscaledTime * 47f);
+            float shakeYaw = shake * shakeAngle * Mathf.Cos(Time.unscaledTime * 39f);
+            float shakeRoll = shake * shakeAngle * Mathf.Sin(Time.unscaledTime * 53f);
+
+            Quaternion rotation = Quaternion.Euler(pitch + shakePitch, yaw + shakeYaw, currentRoll + shakeRoll);
             Vector3 pivot = target.position + Vector3.up * pivotHeight;
 
             if (!pivotReady)

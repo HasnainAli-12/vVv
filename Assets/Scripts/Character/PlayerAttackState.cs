@@ -26,6 +26,28 @@ namespace NasCon.Game
         [Min(0.1f)]
         public float playbackSpeed = 1f;
 
+        [Header("Damage")]
+        [Tooltip("Fraction of the clip at which the hit lands. Fires once, when elapsed crosses it. " +
+                 "Set it at the clip's real impact frame or the damage reads as out of sync with the swing.")]
+        [Range(0f, 1f)]
+        public float hitFraction = 0.4f;
+
+        [Tooltip("Damage dealt by this hit.")]
+        [Min(0f)]
+        public float damage = 12f;
+
+        [Tooltip("Radius of the damage sweep, centred in front of the chest.")]
+        [Min(0.1f)]
+        public float hitRadius = 1.1f;
+
+        [Tooltip("How far in front of the character the sweep is centred.")]
+        [Min(0f)]
+        public float hitReach = 1.3f;
+
+        [Tooltip("Height above the character's feet at which the sweep sits.")]
+        [Min(0f)]
+        public float hitHeight = 1.1f;
+
         public float Duration
         {
             get { return clip == null ? 0.5f : clip.length / Mathf.Max(0.1f, playbackSpeed); }
@@ -57,6 +79,16 @@ namespace NasCon.Game
         [Min(0f)]
         [SerializeField] float comboResetTime = 0.35f;
 
+        [Header("Aiming")]
+        [Tooltip("Rotate the attack toward the nearest enemy within this range. Without it, swinging " +
+                 "while running past a target sends the hit into empty air.")]
+        [Min(0f)]
+        [SerializeField] float softAimRange = 3.5f;
+
+        [Tooltip("Half-angle of the aim cone, in degrees. Wider snaps more aggressively.")]
+        [Range(0f, 180f)]
+        [SerializeField] float softAimAngle = 60f;
+
         [Header("Movement")]
         [Tooltip("Fraction of the entry speed kept during an attack.")]
         [Range(0f, 1f)]
@@ -76,6 +108,22 @@ namespace NasCon.Game
         bool endAnnounced;
         bool lastAttackHeld;
         bool lastKickHeld;
+
+        // one damage sweep per combo step, latched so a step cannot hit twice
+        bool hitFired;
+
+        Health selfHealth;
+
+        /// <summary>The attacker's own Health, for the team filter. Cached; the component is on the actor root.</summary>
+        Health SelfHealth
+        {
+            get
+            {
+                if (selfHealth == null && CharacterActor != null)
+                    selfHealth = CharacterActor.GetComponent<Health>();
+                return selfHealth;
+            }
+        }
 
         public override bool CheckEnterTransition(CharacterState fromState)
         {
@@ -108,13 +156,60 @@ namespace NasCon.Game
             if (planar.sqrMagnitude > 0.0001f)
                 attackDirection = planar.normalized;
 
+            ApplySoftAim();
+
             BeginStep(0);
+        }
+
+        /// <summary>
+        /// Snaps the attack direction onto the nearest hostile inside a forward cone.
+        ///
+        /// The direction is otherwise taken from movement, which is right when you are charging
+        /// straight at something and wrong the moment you run past it - you punch where you are
+        /// going rather than where the target is, and the hit misses. This nudges both the facing
+        /// and the hitbox together, so the character turns into the swing.
+        /// </summary>
+        void ApplySoftAim()
+        {
+            if (softAimRange <= 0f) return;
+
+            Health mine = SelfHealth;
+            Health.Team side = mine != null ? mine.Side : Health.Team.Player;
+
+            Vector3 feet = CharacterActor.transform.position;
+            Transform best = null;
+            float bestDistance = float.MaxValue;
+
+            foreach (var candidate in UnityEngine.Object.FindObjectsByType<Health>(FindObjectsSortMode.None))
+            {
+                if (candidate == null || !candidate.IsAlive || candidate.Side == side) continue;
+
+                Vector3 to = candidate.transform.position - feet;
+                to.y = 0f;
+                if (to.sqrMagnitude < 0.0001f) continue;
+                if (to.sqrMagnitude > softAimRange * softAimRange) continue;
+
+                if (Vector3.Angle(attackDirection, to.normalized) > softAimAngle) continue;
+
+                float d = to.sqrMagnitude;
+                if (d < bestDistance) { bestDistance = d; best = candidate.transform; }
+            }
+
+            if (best == null) return;
+
+            Vector3 aim = best.position - feet;
+            aim.y = 0f;
+            if (aim.sqrMagnitude < 0.0001f) return;
+
+            attackDirection = aim.normalized;
+            CharacterActor.transform.rotation = Quaternion.LookRotation(attackDirection);
         }
 
         void BeginStep(int i)
         {
             index = i;
             elapsed = 0f;
+            hitFired = false;
 
             ComboStep step = activeCombo[i];
             stepDuration = step.Duration;
@@ -142,6 +237,13 @@ namespace NasCon.Game
             ComboStep step = activeCombo[index];
             float fraction = stepDuration > 0f ? elapsed / stepDuration : 1f;
 
+            // the damage window: fires once, on the frame the clip reaches its impact fraction
+            if (!hitFired && fraction >= step.hitFraction)
+            {
+                hitFired = true;
+                DealHit(step);
+            }
+
             if (advancePressed && fraction >= step.cancelFraction && index < activeCombo.Length - 1)
             {
                 BeginStep(index + 1);
@@ -157,6 +259,25 @@ namespace NasCon.Game
             Vector3 velocity = attackDirection * lungeNow;
             velocity.y = CharacterActor.Velocity.y;
             CharacterActor.Velocity = velocity;
+        }
+
+        /// <summary>
+        /// Fires the sweep for one combo step. Centred at chest height in front of the character,
+        /// along the same frozen direction the lunge uses, so the hitbox follows the animation.
+        /// </summary>
+        void DealHit(ComboStep step)
+        {
+            if (step == null || step.damage <= 0f) return;
+
+            Health mine = SelfHealth;
+            Health.Team side = mine != null ? mine.Side : Health.Team.Player;
+
+            Vector3 origin = CharacterActor.transform.position
+                             + Vector3.up * step.hitHeight
+                             + attackDirection * step.hitReach;
+
+            HitResolver.Sphere(origin, step.hitRadius, step.damage, side,
+                               CharacterActor.gameObject, origin);
         }
 
         /// <summary>

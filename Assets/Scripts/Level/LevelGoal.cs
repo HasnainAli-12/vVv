@@ -17,6 +17,9 @@ namespace NasCon.Level
 
         bool completed;
 
+        /// <summary>Fired once, when the player reaches the goal. Read-only hook for the HUD's timer.</summary>
+        public event System.Action Completed;
+
         void OnTriggerEnter(Collider other)
         {
             if (completed)
@@ -27,6 +30,9 @@ namespace NasCon.Level
                 return;
 
             completed = true;
+
+            if (Completed != null)
+                Completed();
 
             // record the run: time since the scene loaded, kept in PlayerPrefs if it beats the best
             float elapsed = Time.timeSinceLevelLoad;

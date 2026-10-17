@@ -9,12 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: ef2f8a7dae97d9e40ba63ad891f51b03
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
-    path: Assets/Scenes/NightParkour.unity
-    guid: 52cf5ca86427bd54da2028147857adb4
-  - enabled: 1
     path: Assets/Scenes/Freerun.unity
     guid: 60521b2a1d985dd4db9e76149424394d
   m_configObjects:

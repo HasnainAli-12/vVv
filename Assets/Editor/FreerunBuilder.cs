@@ -69,6 +69,8 @@ namespace NasCon.Level.EditorTools
             BuildBoss();
             Props();
             BuildPlayer();
+            BuildHUD();
+            BuildVolumes();
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene, ScenePath);
@@ -278,18 +280,36 @@ namespace NasCon.Level.EditorTools
             RenderSettings.fogColor = new Color(0.11f, 0.06f, 0.045f, 1f);
             RenderSettings.fogDensity = 0.0075f;
 
-            var skyShader = Shader.Find("Skybox/Procedural");
-            if (skyShader != null)
+            // Kenney space skybox (already a cubemap with a Skybox/Cubemap material). Ambient is held
+            // down deliberately: the course was tuned against a near-black procedural sky, and letting
+            // a star field drive ambient would lift the whole level.
+            var sky = AssetDatabase.LoadAssetAtPath<Material>("Assets/kenney_skyboxes-space/Skyboxes/Materials/skybox-space-galaxy.mat");
+            if (sky != null)
             {
-                var sky = new Material(skyShader);
-                sky.SetColor("_SkyTint", new Color(0.10f, 0.12f, 0.20f, 1f));
-                sky.SetColor("_GroundColor", new Color(0.05f, 0.045f, 0.05f, 1f));
-                sky.SetFloat("_Exposure", 0.75f);
-                sky.SetFloat("_SunDisk", 0f);
-                sky.SetFloat("_AtmosphereThickness", 0.7f);
-                AssetDatabase.CreateAsset(sky, MaterialFolder + "/NightSky.mat");
+                if (sky.HasProperty("_Rotation")) sky.SetFloat("_Rotation", 35f);
                 RenderSettings.skybox = sky;
             }
+            else
+            {
+                var skyShader = Shader.Find("Skybox/Procedural");
+                if (skyShader != null)
+                {
+                    var fallback = new Material(skyShader);
+                    fallback.SetColor("_SkyTint", new Color(0.10f, 0.12f, 0.20f, 1f));
+                    fallback.SetColor("_GroundColor", new Color(0.05f, 0.045f, 0.05f, 1f));
+                    fallback.SetFloat("_Exposure", 0.75f);
+                    fallback.SetFloat("_SunDisk", 0f);
+                    fallback.SetFloat("_AtmosphereThickness", 0.7f);
+                    AssetDatabase.CreateAsset(fallback, MaterialFolder + "/NightSky.mat");
+                    RenderSettings.skybox = fallback;
+                }
+            }
+
+            RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Trilight;
+            RenderSettings.ambientSkyColor = new Color(0.16f, 0.17f, 0.22f);
+            RenderSettings.ambientEquatorColor = new Color(0.10f, 0.09f, 0.10f);
+            RenderSettings.ambientGroundColor = new Color(0.05f, 0.04f, 0.045f);
+            RenderSettings.ambientIntensity = 1f;
             DynamicGI.UpdateEnvironment();
 
             var moon = new GameObject("Moon");
@@ -598,6 +618,86 @@ namespace NasCon.Level.EditorTools
             var pmat = new Material(Shader.Find(ParticleShader));
             AssetDatabase.CreateAsset(pmat, MaterialFolder + "/EmberParticle.mat");
             pr.material = pmat;
+        }
+
+        // ================================================================ hud
+
+        /// The HUD lives in a prefab and is instantiated here rather than hand-placed in the scene,
+        /// because this builder rebuilds the scene from nothing and would otherwise wipe it.
+        static void BuildHUD()
+        {
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/UI/HUD/PlayerHUD.prefab");
+            if (prefab == null)
+            {
+                Debug.LogWarning("[Freerun] PlayerHUD.prefab not found - no HUD in this build");
+                return;
+            }
+
+            var hud = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
+            hud.name = "HUD";
+
+            // the pause menu owns Escape now; the camera's own cursor toggle would fight it
+            foreach (var orbit in UnityEngine.Object.FindObjectsByType<ThirdPersonOrbitCamera>(FindObjectsSortMode.None))
+            {
+                var so = new SerializedObject(orbit);
+                var key = so.FindProperty("toggleCursorKey");
+                if (key != null) { key.enumValueIndex = 0; so.ApplyModifiedPropertiesWithoutUndo(); }
+            }
+        }
+
+        // ================================================================ volumes
+
+        /// <summary>
+        /// The two Global Volumes and their blend driver.
+        ///
+        /// Built here rather than left to the scene because this builder reconstructs the scene from
+        /// nothing - hand-added volumes were being wiped on every rebuild, which twice left the level
+        /// running the wrong colour grade with no rewind effect at all.
+        /// </summary>
+        static void BuildVolumes()
+        {
+            var normalProfile = AssetDatabase.LoadAssetAtPath<UnityEngine.Rendering.VolumeProfile>(
+                "Assets/Settings/Rewind/NormalProfile.asset");
+            var rewindProfile = AssetDatabase.LoadAssetAtPath<UnityEngine.Rendering.VolumeProfile>(
+                "Assets/Settings/Rewind/RewindProfile.asset");
+
+            if (normalProfile == null || rewindProfile == null)
+            {
+                Debug.LogWarning("[Freerun] rewind volume profiles not found - scene will have no colour grade");
+                return;
+            }
+
+            var normalGo = new GameObject("Global Volume");
+            var normalVol = normalGo.AddComponent<UnityEngine.Rendering.Volume>();
+            normalVol.isGlobal = true;
+            normalVol.priority = 0f;
+            normalVol.weight = 1f;
+            normalVol.profile = normalProfile;
+
+            var rewindGo = new GameObject("Rewind Volume");
+            var rewindVol = rewindGo.AddComponent<UnityEngine.Rendering.Volume>();
+            rewindVol.isGlobal = true;
+            rewindVol.priority = 1f;          // above normal so it wins when weighted in
+            rewindVol.weight = 0f;
+            rewindVol.profile = rewindProfile;
+
+            var blend = normalGo.AddComponent<NasCon.FX.RewindVolumeBlend>();
+            var so = new SerializedObject(blend);
+            so.FindProperty("normalVolume").objectReferenceValue = normalVol;
+            so.FindProperty("rewindVolume").objectReferenceValue = rewindVol;
+
+            // Props() has already run by this point, so the embers exist and can be wired to run
+            // backwards during a rewind
+            var embers = new List<ParticleSystem>();
+            foreach (var ps in UnityEngine.Object.FindObjectsByType<ParticleSystem>(FindObjectsSortMode.None))
+                if (ps.gameObject.name.ToLower().Contains("ember")) embers.Add(ps);
+
+            var arr = so.FindProperty("emberSystems");
+            arr.arraySize = embers.Count;
+            for (int i = 0; i < embers.Count; i++)
+                arr.GetArrayElementAtIndex(i).objectReferenceValue = embers[i];
+
+            so.ApplyModifiedPropertiesWithoutUndo();
         }
 
         // ================================================================ player

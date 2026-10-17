@@ -25,10 +25,10 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _CornerIntensity: 6.5
+    - _CornerIntensity: 2.1
     - _CornerWidth: 0.085
     - _EdgeWidth: 0.045
-    - _GlowIntensity: 3.6
+    - _GlowIntensity: 1.35
     - _Smoothness: 0.12
     m_Colors:
     - _BaseColor: {r: 0.085, g: 0.072, b: 0.078, a: 1}
