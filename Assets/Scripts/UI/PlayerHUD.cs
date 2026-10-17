@@ -296,8 +296,15 @@ namespace NasCon.UI
 
         void OnTeleported(Vector3 position, Quaternion rotation)
         {
-            // a respawn is the one teleport the player should feel
-            vignetteAlpha = Mathf.Max(vignetteAlpha, 0.35f);
+            // Deliberately does nothing.
+            //
+            // This used to flash the damage vignette on any teleport, on the assumption that a teleport
+            // means a respawn. But the character is repositioned with Teleport by the LEDGE CLIMB and by
+            // the POLE SWING too - so every mantle and every swing exit flashed red as if the player had
+            // been hit. A reposition is not damage.
+            //
+            // If a respawn system is added later and it should be felt, trigger the vignette from that
+            // code directly rather than from the teleport event.
         }
 
         void OnLevelCompleted()
@@ -309,6 +316,19 @@ namespace NasCon.UI
         }
 
         // ---------------------------------------------------------------- buttons
+
+        /// <summary>
+        /// Starts the run clock.
+        ///
+        /// Called by the intro sequence at the moment control is handed over, so the timer measures
+        /// the run rather than however long the player sat on the start menu.
+        /// </summary>
+        public void StartRunTimer()
+        {
+            runStartTime = Time.time;
+            finishedTime = -1f;
+            if (timerLabel != null) timerLabel.color = timerNormal;
+        }
 
         public void Retry()
         {

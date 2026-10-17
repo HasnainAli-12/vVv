@@ -55,6 +55,9 @@ namespace NasCon.Game
 
         public override void EnterBehaviour(float dt, CharacterState fromState)
         {
+            // once per slide, at the entry - not looped while sliding
+            Sfx.Play("slide", CharacterActor.transform.position, 0.7f);
+
             elapsed = 0f;
             endAnnounced = false;
 

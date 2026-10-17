@@ -53,6 +53,9 @@ namespace NasCon.Game
         /// <summary>Launch with an owning side, read from the caster's Health.</summary>
         public void Launch(Transform homingTarget, Health.Team team)
         {
+            // the throw is the tell - the player needs to hear it coming to react to it
+            Sfx.Play("orb_throw", transform.position, 0.85f);
+
             attackerTeam = team;
             target = homingTarget;
 
@@ -127,6 +130,12 @@ namespace NasCon.Game
             {
                 var vfx = Instantiate(impactVfx, position, Quaternion.identity);
                 Destroy(vfx, impactVfxLifetime);
+            }
+            else
+            {
+                // No prefab wired on this projectile, so fall back to the shared fire impact. The enemies
+                // throw these constantly and an invisible impact reads as the hit not registering.
+                FXV.Spawn("vfx_fire_impact", position, Quaternion.identity, 1.1f);
             }
 
             if (impactSfx != null)

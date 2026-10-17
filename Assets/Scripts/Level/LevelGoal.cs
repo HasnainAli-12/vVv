@@ -34,6 +34,8 @@ namespace NasCon.Level
             if (Completed != null)
                 Completed();
 
+            NasCon.Game.Sfx.Play2D("level_complete", 0.9f);
+
             // record the run: time since the scene loaded, kept in PlayerPrefs if it beats the best
             float elapsed = Time.timeSinceLevelLoad;
             int minutes = Mathf.FloorToInt(elapsed / 60f);

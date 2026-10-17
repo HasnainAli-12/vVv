@@ -112,3 +112,15 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# --- added before the first push ---
+# Unity's generated IDE project files. Rebuilt on every import; never worth committing.
+obj/
+*.csproj
+*.slnx
+
+# Profiler captures. These are hundreds of megabytes of binary recording and are not source.
+ProfilerCaptures/
+
+# Build output. Regenerable from source, and a WebGL build is large.
+Builds/

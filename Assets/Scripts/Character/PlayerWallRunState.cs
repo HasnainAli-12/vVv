@@ -83,6 +83,13 @@ namespace NasCon.Game
         [Tooltip("Ceiling on the resulting forward speed. This is the biggest lever on wall-jump distance.")]
         [SerializeField] float maxForwardSpeed = 13f;
 
+        [Header("Audio")]
+        [Tooltip("Looped while on the wall. Placeholder - swap for a dedicated wall-run scrape when you have one.")]
+        [SerializeField] string wallRunClip = "slide";
+        [SerializeField, Range(0f, 1f)] float wallRunVolume = 0.35f;
+
+        AudioSource wallRunSource;
+
         [Header("Animator")]
         [SerializeField] string runLeftParameter = "WallRunL";
         [SerializeField] string runRightParameter = "WallRunR";
@@ -251,8 +258,11 @@ namespace NasCon.Game
             {
                 // Clear any leftover end trigger first. If a previous run ended while the animator was
                 // already elsewhere, WallRunEnd was never consumed - it would then fire the instant
-                // this run starts and cut it after a frame.
+                // this run starts and cut it after a frame. Same for the wall-jump triggers: they
+                // latch until consumed, and a stale one plays the one-arm swing clip out of nowhere.
                 CharacterActor.Animator.ResetTrigger("WallRunEnd");
+                CharacterActor.Animator.ResetTrigger("WallJumpL");
+                CharacterActor.Animator.ResetTrigger("WallJumpR");
                 CharacterActor.Animator.SetTrigger(wallOnRight ? runRightParameter : runLeftParameter);
                 CharacterActor.Animator.SetBool(groundedParameter, false);
             }
@@ -260,6 +270,10 @@ namespace NasCon.Game
             // Hand the camera its tilt. Rolling towards the wall so it dips is what sells the run.
             IsActive = true;
             TargetRoll = wallOnRight ? cameraRoll : -cameraRoll;
+
+            // Scrape loop for the duration of the run. Started here rather than in Update so it plays
+            // once, not every frame, and stopped in ExitBehaviour so it cannot outlive the state.
+            wallRunSource = Sfx.PlayLoop(wallRunClip, CharacterActor.transform, wallRunVolume);
         }
 
         public override void UpdateBehaviour(float dt)
@@ -284,6 +298,9 @@ namespace NasCon.Game
 
             velocity.y = vertical;
             CharacterActor.Velocity = velocity;
+
+            // the scrape was never wanted - the run reads better without dust spraying off the wall
+            // face. Replaced by a looped scrape sound, started in EnterBehaviour.
 
             // face the run, so the side-specific clip lines up with the wall
             Quaternion want = Quaternion.LookRotation(runDirection, Vector3.up);
@@ -367,7 +384,12 @@ namespace NasCon.Game
             // is only 0.4 s long, so it fired every loop and dropped the animation while the character
             // kept wall running.
             if (!jumped && IsAnimatorValid())
+            {
                 CharacterActor.Animator.SetTrigger("WallRunEnd");
+                // never let a wall-jump trigger survive the run - see EnterBehaviour
+                CharacterActor.Animator.ResetTrigger("WallJumpL");
+                CharacterActor.Animator.ResetTrigger("WallJumpR");
+            }
 
             jumped = false;
 
@@ -375,6 +397,10 @@ namespace NasCon.Game
             IsActive = false;
             TargetRoll = 0f;
             cooldownUntil = Time.time + cooldown;
+
+            // the loop must not outlive the state - skipping this leaves it playing forever, since
+            // the source is pooled and nothing else owns it
+            if (wallRunSource != null) { wallRunSource.Stop(); wallRunSource = null; }
         }
 
 

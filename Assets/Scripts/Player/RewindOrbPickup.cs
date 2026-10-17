@@ -67,6 +67,7 @@ namespace NasCon.Game
             {
                 var charges = other.GetComponentInParent<PlayerAbilities>();
                 if (charges != null) charges.AddRewindCharge(1);
+                Sfx.Play("time_orb", transform.position, 0.8f);
             }
 
             if (pickupSfx != null)

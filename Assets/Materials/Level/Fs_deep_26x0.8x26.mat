@@ -31,7 +31,7 @@ Material:
     - _GlowIntensity: 1.35
     - _Smoothness: 0.12
     m_Colors:
-    - _BaseColor: {r: 0.13, g: 0.115, b: 0.12, a: 1}
+    - _BaseColor: {r: 0.17, g: 0.155, b: 0.15, a: 1}
     - _CornerColor: {r: 1, g: 0.3, b: 0.07, a: 1}
     - _EdgeColor: {r: 0.8, g: 0.14, b: 0.04, a: 1}
     - _ObjectScale: {r: 26, g: 0.8, b: 26, a: 0}

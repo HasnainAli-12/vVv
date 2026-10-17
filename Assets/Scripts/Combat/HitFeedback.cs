@@ -143,6 +143,11 @@ namespace NasCon.Game
             if (renderer != null) renderer.sharedMaterial = sparkInstance;
 
             StartCoroutine(Pop(spark, Mathf.Max(0.05f, sparkLife)));
+
+            // A real particle burst on the heavier hits. The code-built quad above still covers the
+            // light ones, so a fast combo does not spawn a prefab every few frames.
+            if (amount >= heavyDamage * 0.5f)
+                FXV.Spawn("vfx_hit_punch", point, Quaternion.identity, 0.9f);
         }
 
         IEnumerator Pop(GameObject spark, float life)

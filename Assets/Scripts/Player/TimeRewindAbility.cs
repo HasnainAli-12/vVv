@@ -90,8 +90,23 @@ namespace NasCon.Game
         public bool IsRewinding { get { return isRewinding; } }
         public bool CanRewind
         {
-            get { return unlocked && !isRewinding && cooldownRemaining <= 0f && count > 1; }
+            get
+            {
+                if (!unlocked || isRewinding) return false;
+
+                // No cooldown gate. The charge cost is the real limit; a cooldown on top of it only
+                // put a delay between pressing R and the ability firing.
+                //
+                // Requires REAL history rather than just a non-empty buffer. Two samples exist by the
+                // first frame, so a count check alone let the rewind fire the moment the scene loaded:
+                // full VFX, full charge spent, and the player moved three centimetres because there
+                // was nothing recorded to replay.
+                return StoredSeconds >= MinBufferSeconds;
+            }
         }
+
+        /// <summary>History needed before a rewind is worth firing.</summary>
+        const float MinBufferSeconds = 0.5f;
 
         /// <summary>0 = ready, 1 = just used. For the cooldown bar.</summary>
         public float CooldownNormalized
@@ -240,9 +255,32 @@ namespace NasCon.Game
 
         // ---------------------------------------------------------------- rewind
 
+        PlayerAbilities playerAbilities;
+
+        /// <summary>
+        /// Pays for one rewind. Returns false when no charge is held, which is what stops the ability
+        /// firing at zero - the charge count is the only gate now, the cooldown is just pacing.
+        ///
+        /// Found lazily rather than serialized so the two components do not need wiring together.
+        /// </summary>
+        bool SpendCharge()
+        {
+            if (playerAbilities == null) playerAbilities = GetComponent<PlayerAbilities>();
+
+            // no charge system on this object: do not block the ability, or the rewind would silently
+            // stop working the moment the component was removed
+            if (playerAbilities == null) return true;
+
+            return playerAbilities.TrySpendRewind();
+        }
+
         void BeginRewind()
         {
             if (count < 2) return;
+
+            // pay before committing. A failed spend must not start a rewind, or the ability would be
+            // free every time it ran out.
+            if (!SpendCharge()) return;
 
             isRewinding = true;
             cursor = 0f;
@@ -274,6 +312,16 @@ namespace NasCon.Game
             }
 
             if (RewindVolumeBlend.Instance != null) RewindVolumeBlend.Instance.StartRewindVisuals();
+
+            // Green burst on activation. The rewind is the signature ability - it needs to read as an
+            // event, not just a colour shift. The aura runs for the whole effect and is cleaned up by
+            // its own lifetime, so it does not need stopping when the rewind ends.
+            Vector3 centre = transform.position + Vector3.up * 0.9f;
+            // the aura rides the player, so it stays with them while the rewind pulls them backwards;
+            // the burst stays where the ability was fired, so the moment has a location
+            FXV.Spawn("vfx_rewind_custom", centre, Quaternion.identity, 1.2f);
+            FXV.SpawnAttached("vfx_rewind_aura", transform, Vector3.up * 0.9f, 1.5f);
+            Sfx.Play("rewind", centre, 0.85f);
 
             if (RewindStarted != null) RewindStarted();
         }
@@ -327,7 +375,19 @@ namespace NasCon.Game
 
             // health rolls back with position. Damage taken after the point being rewound to is
             // undone; damage taken before it stays applied, because that is what was recorded.
-            if (health != null) health.Restore(a.health);
+            if (health != null)
+            {
+                float before = health.Current;
+                health.Restore(a.health);
+
+                // Heal VFX only when the rewind actually gave health back. Rewinding to a moment where
+                // the player was already at full health is not a heal and should not read as one.
+                if (health.Current > before + 0.01f)
+                {
+                    FXV.Spawn("vfx_heal_custom", transform.position + Vector3.up * 0.9f, Quaternion.identity, 1.25f);
+                    Sfx.Play("heal", transform.position + Vector3.up * 1.1f, 0.7f);
+                }
+            }
 
             // keep the clock showing reversed motion without touching Time.timeScale
             if (Time.timeScale > 0f) { /* no-op: playback uses unscaled dt by design */ }
@@ -365,6 +425,9 @@ namespace NasCon.Game
             if (rewindSource != null) rewindSource.Stop();
 
             if (RewindVolumeBlend.Instance != null) RewindVolumeBlend.Instance.EndRewindVisuals();
+
+            // closing flash, so the snap back to the present reads as a moment
+            FXV.Spawn("vfx_rewind_flash", transform.position + Vector3.up * 0.9f, Quaternion.identity, 1.1f);
 
             // fresh history after every use - the old one is no longer contiguous with the player
             head = 0;

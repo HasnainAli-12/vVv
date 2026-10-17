@@ -6,11 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
-    guid: ef2f8a7dae97d9e40ba63ad891f51b03
-  - enabled: 1
     path: Assets/Scenes/Freerun.unity
     guid: 60521b2a1d985dd4db9e76149424394d
+  - enabled: 1
+    path: Assets/Scenes/Win.unity
+    guid: f8e9f67d65dfffe45839871f92ddd83c
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

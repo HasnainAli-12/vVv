@@ -18,6 +18,9 @@ GameObject:
   - component: {fileID: 6327981416297198692}
   - component: {fileID: 5435440947052466661}
   - component: {fileID: 3633621262388040730}
+  - component: {fileID: 3969838777471670931}
+  - component: {fileID: 8850914770084754560}
+  - component: {fileID: 6357911339290642787}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -182,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd2b573bbc4f86e44be0a3d292ba575b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NasCon.Game.PlayerAbilities
-  rewindCharges: 3
+  rewindCharges: 0
   rewindChargesMax: 5
 --- !u!114 &7841422618456511753
 MonoBehaviour:
@@ -202,6 +205,7 @@ MonoBehaviour:
   blockInput: 1
   allowSkip: 1
   skipAfter: 0.3
+  autoPlay: 1
   animator: {fileID: 0}
   brain: {fileID: 0}
 --- !u!114 &6327981416297198692
@@ -247,7 +251,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NasCon.Game.TimeRewindAbility
   recordSeconds: 5
   sampleRate: 30
-  recordAnimator: 1
+  recordAnimator: 0
   rewindSpeed: 1.25
   slowMotionScale: 0.85
   cooldown: 2
@@ -352,6 +356,63 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3969838777471670931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668956146100743102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34db9dc95e36da548aea749b29e69f76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NasCon.Game.PlayerWeapon
+  sword: {fileID: 0}
+  swordName: SwordOnBack
+  handLocalPosition: {x: -0.687, y: 0.157, z: 0.034}
+  handLocalEuler: {x: 42.889, y: 106.499, z: 29.252}
+  handLocalScale: {x: 1, y: 1, z: 1}
+  handoverAt: 0.7
+  drawTrigger: Draw
+  sheathTrigger: Sheath
+  drawFallback: 0.63
+  sheathFallback: 1.1
+  toggleKey: 38
+--- !u!114 &8850914770084754560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668956146100743102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfadee08f4359c244a728cf4ae7397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NasCon.Game.PlayerDeath
+  health: {fileID: 0}
+  deadTrigger: Dead
+  stopAfter: 2.4
+  freezeEnemies: 1
+--- !u!114 &6357911339290642787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668956146100743102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53867facad9a60047a181f81e38d1c18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NasCon.Game.FallRespawn
+  killHeight: -5
+  sampleInterval: 0.25
+  respawnCooldown: 1
+  liftOnRespawn: 0.35
+  respawnVfx: vfx_checkpoint
+  respawnSound: checkpint 2
 --- !u!1 &5081503684218152681
 GameObject:
   m_ObjectHideFlags: 0
@@ -823,6 +884,25 @@ MonoBehaviour:
     hitRadius: 1.1
     hitReach: 1.3
     hitHeight: 1.1
+  swordCombo:
+  - clip: {fileID: 7400000, guid: 0cf06c1cd2ad9aa4ab4be4d9f398cd45, type: 3}
+    trigger: Sword1
+    cancelFraction: 0.55
+    playbackSpeed: 1
+    hitFraction: 0.45
+    damage: 16
+    hitRadius: 1.3
+    hitReach: 1.7
+    hitHeight: 1.1
+  - clip: {fileID: 7400000, guid: 214c7c9b1789eca4fa03313e4abaac1d, type: 3}
+    trigger: Sword2
+    cancelFraction: 0.75
+    playbackSpeed: 1
+    hitFraction: 0.55
+    damage: 28
+    hitRadius: 1.3
+    hitReach: 1.7
+    hitHeight: 1.1
   comboResetTime: 0.02
   softAimRange: 3.5
   softAimAngle: 60
@@ -864,6 +944,8 @@ MonoBehaviour:
   jumpAwaySpeed: 4
   jumpForwardSpeed: 6
   maxForwardSpeed: 13
+  wallRunClip: slide
+  wallRunVolume: 0.35
   runLeftParameter: WallRunL
   runRightParameter: WallRunR
   jumpLeftParameter: WallJumpL
@@ -914,11 +996,22 @@ MonoBehaviour:
   ropeLength: 1.95
   cooldown: 0.25
   maxTrackSpeed: 28
+  pumpAcceleration: 7
+  idleDamping: 1
   damping: 0.35
   maxOmega: 6
+  maxAngleDegrees: 80
+  maxHangTime: 0
+  visual: {fileID: 0}
+  tiltAmount: 1
+  nextPoleRange: 9
+  nextPoleAngle: 70
+  jumpFlightSpeed: 8
+  minFlightTime: 0.35
+  maxFlightTime: 1.1
+  launchGravity: 25
   releaseBoost: 1.2
   releaseLift: 4
-  maxDuration: 4
   swingParameter: Swing
   swingEndParameter: SwingEnd
 --- !u!1001 &1912543588399952944

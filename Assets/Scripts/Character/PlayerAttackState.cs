@@ -1,6 +1,6 @@
-using UnityEngine;
 using Lightbug.CharacterControllerPro.Core;
 using Lightbug.CharacterControllerPro.Implementation;
+using UnityEngine;
 
 namespace NasCon.Game
 {
@@ -74,6 +74,8 @@ namespace NasCon.Game
         [Header("Combos")]
         [SerializeField] ComboStep[] punchCombo = new ComboStep[3];
         [SerializeField] ComboStep[] kickCombo = new ComboStep[3];
+        [Tooltip("Used instead of the punch combo while the sword is drawn.")]
+        [SerializeField] ComboStep[] swordCombo = new ComboStep[3];
 
         [Tooltip("How long after a hit ends you can still press to continue the combo.")]
         [Min(0f)]
@@ -144,6 +146,11 @@ namespace NasCon.Game
             if (activeCombo == null || activeCombo.Length == 0)
                 activeCombo = punchCombo;
 
+            // while the sword is drawn, the attack button runs the blade combo instead of fists
+            var weapon = CharacterActor.GetComponent<PlayerWeapon>();
+            if (weapon != null && weapon.IsEquipped && swordCombo != null && swordCombo.Length > 0)
+                activeCombo = swordCombo;
+
             lastAttackHeld = CharacterActions.attack.value;
             lastKickHeld = CharacterActions.kick.value;
 
@@ -157,6 +164,11 @@ namespace NasCon.Game
                 attackDirection = planar.normalized;
 
             ApplySoftAim();
+
+            // clear a stale ComboEnd left over from a previous attack that was interrupted
+            // (roll, slide, etc.). If it stays set, the new punch exits instantly back to Locomotion.
+            if (IsAnimatorValid() && !string.IsNullOrEmpty(comboEndParameter))
+                CharacterActor.Animator.ResetTrigger(comboEndParameter);
 
             BeginStep(0);
         }
@@ -215,8 +227,29 @@ namespace NasCon.Game
             stepDuration = step.Duration;
             initialLunge = Mathf.Max(lungeSpeed, CharacterActor.PlanarVelocity.magnitude * speedRetention);
 
-            if (IsAnimatorValid() && !string.IsNullOrEmpty(step.trigger))
-                CharacterActor.Animator.SetTrigger(step.trigger);
+            // swing whoosh, once per hit, at the moment the clip starts. Sword clips while the blade is
+            // out, fists otherwise - they read completely differently and the wrong one is obvious.
+            // The sword has three variants, one per combo step, so a three-hit chain never repeats itself.
+            string swing;
+            if (activeCombo == swordCombo)
+                swing = index == 0 ? "sword_swing" : (index == 1 ? "sword_swing 2" : "sword_swing 3");
+            else
+                swing = "ffist_swing";
+
+            Sfx.Play(swing, CharacterActor.transform.position + Vector3.up * 1.2f, 0.6f);
+
+            if (IsAnimatorValid())
+            {
+                // clear leftover triggers so a stale one can't fire a state early
+                foreach (var s in activeCombo)
+                {
+                    if (!string.IsNullOrEmpty(s.trigger))
+                        CharacterActor.Animator.ResetTrigger(s.trigger);
+                }
+
+                if (!string.IsNullOrEmpty(step.trigger))
+                    CharacterActor.Animator.SetTrigger(step.trigger);
+            }
         }
 
         public override void UpdateBehaviour(float dt)
@@ -231,8 +264,8 @@ namespace NasCon.Game
             lastAttackHeld = attackHeld;
             lastKickHeld = kickHeld;
 
-            bool isPunchCombo = activeCombo == punchCombo;
-            bool advancePressed = isPunchCombo ? attackPressed : kickPressed;
+            // kicks advance on the kick button; fists and sword both advance on attack
+            bool advancePressed = activeCombo == kickCombo ? kickPressed : attackPressed;
 
             ComboStep step = activeCombo[index];
             float fraction = stepDuration > 0f ? elapsed / stepDuration : 1f;
@@ -249,6 +282,14 @@ namespace NasCon.Game
                 BeginStep(index + 1);
             }
             else if (fraction >= 1f && elapsed >= stepDuration + comboResetTime)
+            {
+                Finish();
+            }
+            // Movement releases the character as soon as the hit has landed. The clips have a long
+            // recovery tail after the impact frame; holding the player through it produced the
+            // "frozen for a second" feel, and the instant release slammed the still-held movement
+            // input into the animator as a sprint pose. Letting movement cancel the tail fixes both.
+            else if (hitFired && CharacterStateController.InputMovementReference.sqrMagnitude > 0.01f)
             {
                 Finish();
             }
@@ -276,8 +317,11 @@ namespace NasCon.Game
                              + Vector3.up * step.hitHeight
                              + attackDirection * step.hitReach;
 
-            HitResolver.Sphere(origin, step.hitRadius, step.damage, side,
-                               CharacterActor.gameObject, origin);
+            int hits = HitResolver.Sphere(origin, step.hitRadius, step.damage, side,
+                                          CharacterActor.gameObject, origin);
+
+            // impact only when it actually connected. A whiff already has its whoosh.
+            if (hits > 0) Sfx.Play("punch_hit", origin, 0.75f);
         }
 
         /// <summary>

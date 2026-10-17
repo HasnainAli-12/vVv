@@ -39,6 +39,9 @@ namespace NasCon.Game
         [Tooltip("Earliest the intro can be skipped, in seconds.")]
         [SerializeField] float skipAfter = 0.3f;
 
+        [Tooltip("Start immediately on scene load. Turn OFF when a menu drives the sequence.")]
+        [SerializeField] bool autoPlay = true;
+
         [Header("Wiring (found automatically if empty)")]
         [SerializeField] Animator animator;
         [SerializeField] CharacterBrain brain;
@@ -57,6 +60,17 @@ namespace NasCon.Game
 
         void Start()
         {
+            if (autoPlay) StartCoroutine(Run());
+        }
+
+        /// <summary>
+        /// Starts the intro on demand, for when a menu owns the sequence rather than the scene load.
+        ///
+        /// Safe if already playing: the menu can call this without having to know.
+        /// </summary>
+        public void Begin()
+        {
+            if (IsPlaying) return;
             StartCoroutine(Run());
         }
 

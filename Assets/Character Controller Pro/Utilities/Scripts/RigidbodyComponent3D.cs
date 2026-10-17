@@ -113,16 +113,33 @@ namespace Lightbug.Utilities
             set => rigidbody.rotation = value;
         }
 
+        // Tracked locally: CCP reads Velocity for PlanarVelocity and the animator parameters, and a
+        // kinematic rigidbody does not store it. Skipping the write entirely (as a previous fix did)
+        // broke every reader - the character's speed read as zero.
+        Vector3 velocity;
+
         public override Vector3 Velocity
         {
-            get => rigidbody.linearVelocity;
-            set => rigidbody.linearVelocity = value;
+            get => velocity;
+            set
+            {
+                velocity = value;
+
+                // Unity 6 refuses linearVelocity on a kinematic body and logs a full stack trace per
+                // warning. Keep the value above, write to the rigidbody only when it is legal.
+                if (rigidbody.isKinematic) return;
+                rigidbody.linearVelocity = value;
+            }
         }
 
         public override Vector3 AngularVelocity
         {
             get => rigidbody.angularVelocity;
-            set => rigidbody.angularVelocity = value;
+            set
+            {
+                if (rigidbody.isKinematic) return;
+                rigidbody.angularVelocity = value;
+            }
         }
 
         public override void Interpolate(Vector3 position) => rigidbody.MovePosition(position);
