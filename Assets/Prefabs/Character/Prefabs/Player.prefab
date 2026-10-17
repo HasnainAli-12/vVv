@@ -1,0 +1,841 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4668956146100743102
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7868149824549149032}
+  - component: {fileID: 1777465580157165815}
+  - component: {fileID: 9102617844091813512}
+  - component: {fileID: 4421057625005009578}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7868149824549149032
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668956146100743102}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3337849171259918942}
+  - {fileID: 6517200134721036053}
+  - {fileID: 1603559436508300731}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1777465580157165815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668956146100743102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78cff8dc757190641a7708af786fcf21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: com.lightbug.character-controller-pro::Lightbug.CharacterControllerPro.Core.CharacterBody
+  is2D: 0
+  bodySize: {x: 0.5, y: 1.7}
+  mass: 50
+--- !u!114 &9102617844091813512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668956146100743102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f199f35221ef584d909e881238cba74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: com.lightbug.character-controller-pro::Lightbug.CharacterControllerPro.Core.CharacterActor
+  interpolateActor: 1
+  useContinuousCollisionDetection: 1
+  UseRootMotion: 0
+  UpdateRootPosition: 1
+  rootMotionVelocityType: 0
+  UpdateRootRotation: 1
+  rootMotionRotationType: 1
+  oneWayPlatformsLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  oneWayPlatformsValidArc: 175
+  slopeLimit: 55
+  stableLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  allowCharactersAsStableSurfaces: 1
+  preventUnstableClimbing: 1
+  preventBadSteps: 1
+  stepUpDistance: 0.6
+  stepDownDistance: 0.5
+  alwaysNotGrounded: 0
+  forceGroundedAtStart: 1
+  useGroundTrigger: 1
+  edgeCompensation: 0
+  useStableEdgeWhenLanding: 1
+  detectGroundWhileAscending: 0
+  supportDynamicGround: 1
+  dynamicGroundLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  rotateForwardDirection: 1
+  maxGroundVelocityChange: 30
+  inheritedGroundPlanarVelocityThreshold: 2
+  inheritedGroundPlanarVelocityMultiplier: 1
+  inheritedGroundVerticalVelocityThreshold: 2
+  inheritedGroundVerticalVelocityMultiplier: 1
+  slideOnWalls: 1
+  resetVelocityOnTeleport: 1
+  stablePostSimulationVelocity: 2
+  unstablePostSimulationVelocity: 2
+  constraintRotation: 1
+  upDirectionReference: {fileID: 0}
+  upDirectionReferenceMode: 1
+  constraintUpDirection: {x: 0, y: 1, z: 0}
+  canPushDynamicRigidbodies: 1
+  pushableRigidbodyLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  applyWeightToGround: 1
+  applyWeightLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  weightGravity: 9.8
+--- !u!114 &4421057625005009578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668956146100743102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdc6217f892a8a949bcb57845130f79e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NasCon.Audio.CharacterAudio
+  footsteps:
+  - {fileID: 8300000, guid: cf70621c9cdf7c549bb4b25c83370805, type: 3}
+  - {fileID: 8300000, guid: b2da11cb0d8687349b95dc91582cee24, type: 3}
+  - {fileID: 8300000, guid: 7ee65c954e0d2354dbb1d1e032fa509f, type: 3}
+  - {fileID: 8300000, guid: 53fa0129890a128468ab2e537575f5d1, type: 3}
+  jump: {fileID: 8300000, guid: 40dc430f8e189774e9b4d0f798ae52bd, type: 3}
+  land: {fileID: 8300000, guid: 8b74156094383a14a9be51ef254e317f, type: 3}
+  swing: {fileID: 8300000, guid: 7edd3af37f1b05d43a7e96a2220d46c1, type: 3}
+  slide: {fileID: 8300000, guid: e482fb7bf8c80f14baa5aff23aea348d, type: 3}
+  hit: {fileID: 8300000, guid: 2c042549916c9a84699cd296016b4e32, type: 3}
+  volume: 0.65
+  spatialBlend: 0.35
+  minDistance: 2
+  maxDistance: 18
+  walkStride: 2.3
+  sprintStride: 1.7
+  landVelocityThreshold: 4.5
+--- !u!1 &5081503684218152681
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1603559436508300731}
+  - component: {fileID: 5954421674776588388}
+  - component: {fileID: 1028740264236674559}
+  m_Layer: 0
+  m_Name: Actions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1603559436508300731
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5081503684218152681}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7868149824549149032}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5954421674776588388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5081503684218152681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c76e107f4442f0f4181c48506caf15f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: com.lightbug.character-controller-pro::Lightbug.CharacterControllerPro.Implementation.CharacterBrain
+  isAI: 0
+  inputHandlerSettings:
+    inputHandler: {fileID: 1028740264236674559}
+    humanInputType: 2
+  aiBehaviour: {fileID: 0}
+  characterActions:
+    jump:
+      value: 0
+    run:
+      value: 0
+    interact:
+      value: 0
+    jetPack:
+      value: 0
+    dash:
+      value: 0
+    crouch:
+      value: 0
+    attack:
+      value: 0
+    kick:
+      value: 0
+    pitch:
+      value: 0
+    roll:
+      value: 0
+    movement:
+      value: {x: 0, y: 0}
+--- !u!114 &1028740264236674559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5081503684218152681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1da613e70cbb93847a258808b311c938, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NasCon.Game.CCPInputSystemHandler
+  actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  actionMapName: Player
+--- !u!1 &6719847298561258756
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3337849171259918942}
+  m_Layer: 0
+  m_Name: Graphics
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3337849171259918942
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6719847298561258756}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1785915201780819875}
+  m_Father: {fileID: 7868149824549149032}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6919950824093913531
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6517200134721036053}
+  - component: {fileID: 1500965271050810142}
+  - component: {fileID: 9151242472729154102}
+  - component: {fileID: 2297384469567231329}
+  - component: {fileID: 6634723391814898807}
+  - component: {fileID: 5818924832445134361}
+  - component: {fileID: 7741628792557068963}
+  - component: {fileID: 40256174799268772}
+  - component: {fileID: 6621429891548368871}
+  m_Layer: 0
+  m_Name: States
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6517200134721036053
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6919950824093913531}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7868149824549149032}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1500965271050810142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6919950824093913531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 991c552c8efe8914186b0d06951c5a1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: com.lightbug.character-controller-pro::Lightbug.CharacterControllerPro.Implementation.CharacterStateController
+  initialState: {fileID: 9151242472729154102}
+  movementReferenceParameters:
+    movementReferenceMode: 1
+    externalReference: {fileID: 0}
+--- !u!114 &9151242472729154102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6919950824093913531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 721c3c25bde461b499725074d289f8ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NasCon.Game.PlayerNormalMovement
+  overrideAnimatorController: 0
+  runtimeAnimatorController: {fileID: 0}
+  planarMovementParameters:
+    baseSpeedLimit: 3.2
+    canRun: 1
+    runInputMode: 1
+    boostSpeedLimit: 8
+    stableGroundedAcceleration: 50
+    stableGroundedDeceleration: 40
+    stableGroundedAngleAccelerationBoost:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 180
+        value: 2
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    unstableGroundedAcceleration: 10
+    unstableGroundedDeceleration: 2
+    unstableGroundedAngleAccelerationBoost:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 180
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    notGroundedAcceleration: 20
+    notGroundedDeceleration: 5
+    notGroundedAngleAccelerationBoost:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 180
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  verticalMovementParameters:
+    useGravity: 1
+    canJump: 1
+    autoCalculate: 0
+    jumpApexHeight: 1.2959999
+    jumpApexDuration: 0.35999998
+    jumpSpeed: 7.2
+    gravity: 20
+    cancelJumpOnRelease: 1
+    cancelJumpMultiplier: 0.5
+    cancelJumpMinTime: 0.1
+    cancelJumpMaxTime: 0.3
+    preGroundedJumpTime: 0.1
+    postGroundedJumpTime: 0.08
+    availableNotGroundedJumps: 0
+    canJumpOnUnstableGround: 0
+    canJumpDown: 1
+    filterByTag: 0
+    jumpDownTag: JumpDown
+    jumpDownDistance: 0.05
+    jumpDownVerticalVelocity: 0.5
+  crouchParameters:
+    enableCrouch: 0
+    notGroundedCrouch: 0
+    heightRatio: 0.75
+    speedMultiplier: 0.3
+    inputMode: 1
+    notGroundedReference: 0
+    sizeLerpSpeed: 8
+  lookingDirectionParameters:
+    changeLookingDirection: 1
+    speed: 10
+    lookingDirectionMode: 0
+    target: {fileID: 0}
+    stableGroundedLookingDirectionMode: 1
+    unstableGroundedLookingDirectionMode: 0
+    notGroundedLookingDirectionMode: 1
+  groundedParameter: Grounded
+  stableParameter: Stable
+  verticalSpeedParameter: VerticalSpeed
+  planarSpeedParameter: PlanarSpeed
+  horizontalAxisParameter: HorizontalAxis
+  verticalAxisParameter: VerticalAxis
+  heightParameter: Height
+--- !u!114 &2297384469567231329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6919950824093913531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a3233cbf02e38048b1529df1f8b67fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NasCon.Game.PlayerRollState
+  overrideAnimatorController: 0
+  runtimeAnimatorController: {fileID: 0}
+  rollParameter: Roll
+  initialVelocity: 7
+  duration: 0.9
+  movementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: -0.75
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.25
+      inSlope: -0.75
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &6634723391814898807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6919950824093913531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c2a01ddd740002469b0bb266b873b6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NasCon.Game.PlayerSlideState
+  overrideAnimatorController: 0
+  runtimeAnimatorController: {fileID: 0}
+  slideParameter: Slide
+  slideEndParameter: SlideEnd
+  minEntrySpeed: 6
+  slideHeightRatio: 0.5
+  slideDuration: 1.4
+  speedOverTime:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: -0.88
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.12
+      inSlope: -0.88
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  minSlideTime: 0.15
+--- !u!114 &5818924832445134361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6919950824093913531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66cd103f569f0d346b7bf3582d01fa15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NasCon.Game.PlayerAttackState
+  overrideAnimatorController: 0
+  runtimeAnimatorController: {fileID: 0}
+  comboEndParameter: ComboEnd
+  punchCombo:
+  - clip: {fileID: 7400000, guid: c2976fa7ea9c6844ca1d7042aef0a731, type: 3}
+    trigger: Punch1
+    cancelFraction: 0.42
+    playbackSpeed: 1
+  - clip: {fileID: 7400000, guid: c62dd38c11e60514cbfbd75556f131da, type: 3}
+    trigger: Punch2
+    cancelFraction: 0.42
+    playbackSpeed: 1.1
+  - clip: {fileID: 7400000, guid: 6009fc35f863bd14ba3908a22fd51715, type: 3}
+    trigger: Punch3
+    cancelFraction: 0.6
+    playbackSpeed: 1.1
+  kickCombo:
+  - clip: {fileID: 7400000, guid: 38587c17cd6cfdd4b8e25d3326747748, type: 3}
+    trigger: Kick1
+    cancelFraction: 0.58
+    playbackSpeed: 1.4
+  - clip: {fileID: 7400000, guid: f410764517d98c547a4ed42923ac30f3, type: 3}
+    trigger: Kick2
+    cancelFraction: 0.88
+    playbackSpeed: 1.4
+  - clip: {fileID: 7400000, guid: f91caa5c21f5a6e46831a3a0e68b30dc, type: 3}
+    trigger: Kick3
+    cancelFraction: 1.01
+    playbackSpeed: 1.4
+  comboResetTime: 0.02
+  speedRetention: 0.2
+  lungeSpeed: 0.6
+--- !u!114 &7741628792557068963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6919950824093913531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bd4460876c964a41a565fe6483b378c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NasCon.Game.PlayerWallRunState
+  overrideAnimatorController: 1
+  runtimeAnimatorController: {fileID: 0}
+  probeDistance: 1.8
+  probeHeight: 1.15
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 64
+  minEntrySpeed: 3.5
+  runSpeed: 8.5
+  speedBlend: 2.5
+  gravityScale: 0.22
+  entryLift: 3.2
+  liftDecay: 3.2
+  maxDuration: 2.2
+  stickForce: 2.2
+  wallLostGrace: 0.22
+  turnRate: 9
+  cooldown: 0.3
+  cameraRoll: 15
+  cameraRollRate: 6
+  jumpUpSpeed: 8.5
+  jumpAwaySpeed: 4
+  jumpForwardSpeed: 6
+  maxForwardSpeed: 13
+  runLeftParameter: WallRunL
+  runRightParameter: WallRunR
+  jumpLeftParameter: WallJumpL
+  jumpRightParameter: WallJumpR
+  groundedParameter: Grounded
+  verticalSpeedParameter: VerticalSpeed
+  planarSpeedParameter: PlanarSpeed
+--- !u!114 &40256174799268772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6919950824093913531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25bec0be71a45c043af3a9de4fbcc758, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NasCon.Game.PlayerClimbState
+  overrideAnimatorController: 1
+  runtimeAnimatorController: {fileID: 0}
+  reach: 1.3
+  minLedgeHeight: 0.55
+  maxLedgeHeight: 2.4
+  ledgeMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  climbTime: 1.25
+  landingInset: 0.4
+  cooldown: 0.6
+  climbParameter: Climb
+--- !u!114 &6621429891548368871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6919950824093913531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36d2e669dec3a5447aec92cbde8a1a5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NasCon.Game.PlayerSwingState
+  overrideAnimatorController: 1
+  runtimeAnimatorController: {fileID: 0}
+  reach: 1.9
+  minEntrySpeed: 2.5
+  ropeLength: 1.95
+  cooldown: 0.25
+  maxTrackSpeed: 28
+  damping: 0.35
+  maxOmega: 6
+  releaseBoost: 1.2
+  releaseLift: 4
+  maxDuration: 4
+  swingParameter: Swing
+  swingEndParameter: SwingEnd
+--- !u!1001 &1912543588399952944
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1897857625501765671}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 59e3a780fc55f814c92c52954bd365a4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.24921797
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 59e3a780fc55f814c92c52954bd365a4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.17041807
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 59e3a780fc55f814c92c52954bd365a4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.06817704
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 59e3a780fc55f814c92c52954bd365a4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.8103406
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 59e3a780fc55f814c92c52954bd365a4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.3927132
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 59e3a780fc55f814c92c52954bd365a4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.24859838
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 59e3a780fc55f814c92c52954bd365a4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.35682392
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 59e3a780fc55f814c92c52954bd365a4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 59e3a780fc55f814c92c52954bd365a4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 59e3a780fc55f814c92c52954bd365a4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 59e3a780fc55f814c92c52954bd365a4, type: 3}
+      propertyPath: m_Name
+      value: SwordOnBack
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 59e3a780fc55f814c92c52954bd365a4, type: 3}
+--- !u!4 &2089671600595719131 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 59e3a780fc55f814c92c52954bd365a4, type: 3}
+  m_PrefabInstance: {fileID: 1912543588399952944}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2252469504575586376
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3337849171259918942}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+      propertyPath: m_Name
+      value: Character
+      objectReference: {fileID: 0}
+    - target: {fileID: 2916570863362053800, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.36765513
+      objectReference: {fileID: 0}
+    - target: {fileID: 2916570863362053800, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.01845875
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: e8ea2c029d60ef341b39c70aeb3327e7, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+      propertyPath: m_UpdateMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+      propertyPath: m_CullingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 366175167995203695, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2089671600595719131}
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+--- !u!4 &1785915201780819875 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+  m_PrefabInstance: {fileID: 2252469504575586376}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1897857625501765671 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 366175167995203695, guid: 13a03b4ed113fa544a5e4170bb4787df, type: 3}
+  m_PrefabInstance: {fileID: 2252469504575586376}
+  m_PrefabAsset: {fileID: 0}
